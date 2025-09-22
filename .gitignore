@@ -1,0 +1,39 @@
+Dataset
+venv/
+__pycache__/
+.ipynb_checkpoints
+.DS_Store
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+# VS Code
+.vscode/
+.idea/
+*.code-workspace
+# macOS
+.DS_Store
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+# Python
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+pip-wheel-metadata/
+# Logs and databases
+*.log
+*.sql
+*.sqlite
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
