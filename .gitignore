@@ -1,3 +1,9 @@
+movie_dict.pkl
+movie_dict.zip
+similarity.pkl
+similarity.zip
+
+
 Dataset
 venv/
 __pycache__/
