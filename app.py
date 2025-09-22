@@ -2,7 +2,10 @@ import streamlit as st
 import pickle
 import pandas as pd
 import requests
+import zipfile
+import numpy as np
 
+# Fatching poster from API
 def fetch_poster(movie_id):
     url = "https://api.themoviedb.org/3/movie/{}?api_key=8265bd1679663a7ea12ac168da84d2e8&language=en-US".format(movie_id)
     data = requests.get(url)
@@ -12,6 +15,7 @@ def fetch_poster(movie_id):
     return full_path
 
 
+# Recommendation function
 def recommend(movie):
     movie_index = movies[movies['title'] == movie].index[0]
     distances = similarity[movie_index]
@@ -27,12 +31,32 @@ def recommend(movie):
         recommended_movie_posters.append(fetch_poster(movie_id))
     return recommended_movies, recommended_movie_posters
 
-movies_dict = pickle.load(open('movie_dict.pkl', 'rb'))
+
+
+# Function to load .pkl files from the zip archive
+def load_pkl_files_from_zip(zip_file):
+    with zipfile.ZipFile(zip_file, 'r') as zip_ref:
+        zip_ref.extractall()  # Extracts the files to the current directory
+        print("Extracted files:", zip_ref.namelist())
+        
+        # Load the movie_dict.pkl file
+        with open(zip_ref.namelist()[0], 'rb') as f:
+            movies_dict = pickle.load(f)
+        # Load the similarity.pkl file
+        with open(zip_ref.namelist()[1], 'rb') as f:
+            similarity = pickle.load(f)
+    
+    return movies_dict, similarity
+
+# Load movie data and similarity data
+movies_dict, similarity = load_pkl_files_from_zip('models.zip')
+#movies_dict = pickle.load(open('movie_dict.zip'))
+#similarity = pickle.load(open('similarity.zip'))
 movies = pd.DataFrame(movies_dict)
 
 
-similarity = pickle.load(open('similarity.pkl', 'rb')) 
 
+# Streamlit UI
 
 st.title('Movie Recommendation System')
 
@@ -41,6 +65,7 @@ selected_movie_name = st.selectbox(
     movies['title'].values)
 
 
+# When the button is clicked, call the recommend function and display the results
 if st.button('Recommend'):
     names,posters = recommend(selected_movie_name)
 
